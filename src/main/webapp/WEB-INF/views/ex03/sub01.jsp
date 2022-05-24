@@ -169,9 +169,89 @@
 					}
 				});
 			});
+			
+			$("#button18").click(function(){
+				$.ajax({
+					url : "/spr2/ex03/sub16",
+					type : "get",
+					success : function(data){
+						console.log(data)
+					},
+					error : function(){
+						console.log("무언가가 잘못됨");
+					}
+				})
+			});
+			
+			$("#button19").click(function(){
+				$.ajax({
+					url : "/spr2/ex03/sub16",
+					success : function(data) {
+						
+					},
+					error : function(){
+						$("#message19").show();
+						$("#message19").text("처리 중 오류 발생").fadeOut(3000);
+					}
+				});
+			});
+			
+			$("#button20").click(function(){
+				$.ajax({
+					url : "/spr2/ex03/sub17",
+					success : function(data){
+						console.log("받은 데이터", data);
+					},
+					error : function() {
+						console.log("무엇인가 잘못됨!!");
+					}
+				});
+			});
+			
+			$("#button21").click(function(){
+				$.ajax({
+					url : "/spr2/ex03/sub18",
+					
+					success : function(data) {
+						$("#message20").show();
+						$("#message20").removeClass("error").text(data).fadeOut(3000);
+					},
+					
+					error : function(data) {
+						$("#message20").show();
+						$("#meesage20").addClass("error").text("무엇인가 잘못됨").fadeOut(3000);
+					}
+				});
+			});
+			
+			$("#button22").click(function(){
+				$.ajax({
+					url : "/spr2/ex03/sub18",
+					
+					success : function(data) {
+						$("#message20").show();
+						$("#message20").removeClass("error").text(data).fadeOut(3000);
+					},
+					
+					error : function(data) {
+						$("#message20").show();
+						$("#meesage20").addClass("error").text("무엇인가 잘못됨").fadeOut(3000);
+					},
+					
+					complete : function() {
+						console.log("항상 실행 됨!!!");
+					}
+				});
+			});
 		});
 	</script>
-
+	<style>
+		.error {
+			background-color: red;
+			color : yellow;
+		}
+	</style>
+	
 <title>Insert title here</title>
 </head>
 <body>
@@ -249,6 +329,18 @@
 	<p>책 저자 : <span id="result3"></span></p>
 	
 	<button id="button17">map to json</button>
+	<hr />
 	
+	<p>요청이 실패할 경우</p>
+	<button id="button18">요청실패 1</button>
+	<button id="button19">요청실패 2</button>
+	<p class="error" id="message19"></p>
+	<button id="button20">서버에서 에러응답</button>
+	
+	<button id="button21">50%확률로 ok</button>
+	
+	<p id="message20"></p>
+	
+	<button id="button22">50%확률로 ok2</button>
 </body>
 </html>

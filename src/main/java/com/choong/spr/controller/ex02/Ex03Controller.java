@@ -3,6 +3,7 @@ package com.choong.spr.controller.ex02;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -124,5 +125,19 @@ public class Ex03Controller {
 		
 		return map;
 	}
+	
+	@GetMapping("sub17")
+	public ResponseEntity<String> method17() { // 이 객체를 return하면 Responsebody뿐만 아니라 헤더와 다른 것들도 조작가능
+											   // 본문의 타입을 제네릭안에 작성하면 됨
+		
+		// 성공시는 객체리턴으로 판단이 가능하기 때문에 굳이 메소드를 사용할 필요는 없음
+		return ResponseEntity.status(500).body("internal server error"); // 에러시 에러응답 리턴
+	}
+	
+	/*@GetMapping("sub18")
+	public ResponseEntity<String> method18() {
+		if(success)
+	}*/
+	
 	
 }
