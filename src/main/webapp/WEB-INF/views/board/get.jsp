@@ -43,17 +43,19 @@
 			
 		});
 		
-		// 페이지 로딩 후 reply list 가져오는 ajax요청		
+		// 페이지 로딩 후 reply list 가져오는 ajax요청	
+			
+		
 		const listReply = function(){
-
-			const data = {boardId : ${board.id}};
+		
+			const data = { boardId : ${board.id} };	
+		
 			$.ajax({
 				url : "${appRoot}/reply/list",
 				type : "get",
-				data : data ,
+				data : data,
 				success : function(list) {
-					console.log(list);
-					
+										
 					const replyListElement = $("#replyList1");
 					replyListElement.empty();
 					
@@ -62,6 +64,7 @@
 					
 					for(let i = 0; i < list.length; i++){
 						const replyElement = $("<li class='list-group-item' />");
+						
 						replyElement.html(`
 								
 								<div id="replyDisplayContainer\${list[i].id }">
@@ -189,7 +192,7 @@
 		
 		// addReplySubmitButton1 버튼 클릭시 ajax 댓글 추가 요청
 		$("#addReplySubmitButton1").click(function(e) {
-			e.preventDefalut();
+			e.preventDefault();
 			
 			const data = $("#insertReplyForm1").serialize();
 			
@@ -222,7 +225,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<my:navBar></my:navBar>
+	<my:navBar current="get"/>
 	<!-- .container>.row>.col>h1{글 본문} -->
 	<div class="container">
 		<div class="row">

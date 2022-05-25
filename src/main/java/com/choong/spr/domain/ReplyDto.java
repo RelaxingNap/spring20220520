@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class ReplyDto {
-	private int id;
-	private int boardId;
+	private Integer id;
+	private Integer boardId;
 	private String content;
 	private LocalDateTime inserted;
 
