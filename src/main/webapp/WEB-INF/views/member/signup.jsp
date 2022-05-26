@@ -95,6 +95,7 @@
 							
 						case "notOk" :
 							$("#Message1").text("사용 불가능한 email입니다.");
+							break;
 					}
 				},
 	
@@ -173,6 +174,7 @@
 		const enableSubmit = function() {
 			if(idOk && pwOk && emailOk && nickNameOk){
 				$("#submitButton1").removeAttr("disabled");
+
 			}else {
 				$("#submitButton1").attr("disabled", "");
 			}
