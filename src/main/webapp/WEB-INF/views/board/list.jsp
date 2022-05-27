@@ -34,6 +34,7 @@
 						<tr>
 							<th><i class="fa-solid fa-hashtag"></i></th>
 							<th>제목</th>
+							<th>닉네임</th>
 							<th><i class="fa-solid fa-calendar"></i></th>
 						</tr>
 					</thead>
@@ -59,6 +60,7 @@
 									</c:if>
 									
 								</td>
+								<td>${board.nickName }</td>
 								<td>${board.prettyInserted }</td>
 							</tr>
 						</c:forEach>

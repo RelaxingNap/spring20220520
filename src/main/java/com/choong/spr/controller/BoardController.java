@@ -1,5 +1,6 @@
 package com.choong.spr.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,13 @@ public class BoardController {
 	}
 	
 	@PostMapping("insert")
-	public String insert(BoardDto board, RedirectAttributes rttr) {
-		boolean success = service.insertBoard(board);
+	public String insert(BoardDto board, Principal principal, RedirectAttributes rttr) {
 		
+		// principal객체에 로그인한 유저의 정보들이 담김
+		board.setMemberId(principal.getName());// 로그인한 사람이름 세팅
+			
+		boolean success = service.insertBoard(board);
+						
 		if (success) {
 			rttr.addFlashAttribute("message", "새 글이 등록되었습니다.");
 		} else {
