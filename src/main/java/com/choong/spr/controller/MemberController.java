@@ -137,4 +137,9 @@ public class MemberController {
 		rttr.addAttribute("id", dto.getId()); // query string
 		return "redirect:/member/get";
 	}
+	
+	@GetMapping("login")
+	public void loginPage() {
+		
+	}
 }

@@ -52,4 +52,15 @@
 	WHERE id = #{id}
 </update>
 
+<!-- 권한 추가 -->
+<insert id="insertAuth">
+	INSERT INTO Auth (memberId, role)
+	VALUES (#{id}, #{auth})
+</insert>
+
+<delete id="deleteAuth">
+	DELETE FROM Auth
+	WHERE memberId = #{id}
+</delete>
+
 </mapper>

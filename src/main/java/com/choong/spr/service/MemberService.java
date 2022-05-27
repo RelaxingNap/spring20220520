@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.choong.spr.domain.MemberDto;
 import com.choong.spr.mapper.MemberMapper;
@@ -26,7 +27,13 @@ public class MemberService {
 		// 암호화된 password를 다시 세팅
 		member.setPassword(encodedPassword);
 		
-		return mapper.insertMember(member) == 1;
+		// insert member 
+		int cnt1 = mapper.insertMember(member);
+		
+		// insert auth
+		int cnt2 = mapper.insertAuth(member.getId(),"ROLE_USER");
+		
+		return cnt1 == 1 && cnt2 == 1;
 	}
 
 	public boolean hasMemberId(String id) {
@@ -54,6 +61,7 @@ public class MemberService {
 		return mapper.selectMemberById(id);
 	}
 
+	@Transactional
 	public boolean removeMember(MemberDto dto) {
 		MemberDto member = mapper.selectMemberById(dto.getId());
 		
@@ -61,7 +69,10 @@ public class MemberService {
 		String encodedPW = member.getPassword();
 		
 		if(passwordEncoder.matches(rawPW, encodedPW)) {
-			return mapper.deleteMemberById(dto.getId()) == 1;
+			int cnt1 = mapper.deleteAuth(dto.getId());
+			int cnt2 = mapper.deleteMemberById(dto.getId());
+				
+			return cnt2 == 1;
 		}
 		
 		return false;
