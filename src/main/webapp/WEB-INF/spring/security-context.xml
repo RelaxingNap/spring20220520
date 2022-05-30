@@ -21,9 +21,9 @@
 		<security:intercept-url pattern="/board/delete" access="isAuthenticated()"/>
 		
 		<!-- 댓글 권한 설정 create, update, delete-->
-		<security:intercept-url pattern="/reply/insert" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/reply/modify" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/reply/delete" access="isAuthenticated()"/>
+		<!-- <security:intercept-url pattern="/reply/insert" access="isAuthenticated()"/> -->
+		<!-- <security:intercept-url pattern="/reply/modify" access="isAuthenticated()"/> -->
+		<!-- <security:intercept-url pattern="/reply/delete" access="isAuthenticated()"/> -->
 		
 		<!-- 회원정보 권한 설정 read, update, delete-->
 		<security:intercept-url pattern="/member/list" access="hasRole('ADMIN')"/>

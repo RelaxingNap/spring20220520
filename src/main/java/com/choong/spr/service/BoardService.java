@@ -47,6 +47,11 @@ public class BoardService {
 		return mapper.deleteBoard(id) == 1;
 	}
 
+	public List<BoardDto> listByMemberId(String memberId) {
+		// TODO Auto-generated method stub
+		return mapper.selectBoardByMemberId(memberId);
+	}
+
 }
 
 

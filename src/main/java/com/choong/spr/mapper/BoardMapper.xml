@@ -34,7 +34,7 @@
 	</insert>
 	
 	<select id="selectBoardById" resultType="com.choong.spr.domain.BoardDto">
-		SELECT b.id, b.title, b.body, b.inserted, COUNT(r.id) numOfReply, m.nickName nickName
+		SELECT b.id, b.title, b.body, b.inserted, COUNT(r.id) numOfReply, m.id memberId, m.nickName nickName
 		FROM Board b LEFT JOIN Reply r ON b.id = r.board_id
 		JOIN Member m ON b.memberId = m.id
 		WHERE b.id = #{id}
@@ -52,4 +52,10 @@
 		DELETE FROM Board
 		WHERE id = #{id }
 	</delete>
+	
+	<select id="selectBoardByMemberId" resultType="com.choong.spr.domain.BoardDto">
+		SELECT id
+		FROM Board
+		WHERE memberId = #{memberId}
+	</select>
 </mapper>

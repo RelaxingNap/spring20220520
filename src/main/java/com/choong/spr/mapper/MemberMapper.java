@@ -28,4 +28,5 @@ public interface MemberMapper {
 
 	int deleteAuth(String id);
 
+	
 }

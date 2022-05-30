@@ -7,14 +7,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.choong.spr.domain.BoardDto;
 import com.choong.spr.domain.MemberDto;
 import com.choong.spr.mapper.MemberMapper;
+import com.choong.spr.mapper.ReplyMapper;
 
 @Service
 public class MemberService {
 
 	@Autowired
 	private MemberMapper mapper;
+	
+	@Autowired
+	private ReplyMapper replyMapper;
+	
+	@Autowired
+	private BoardService boardService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -69,7 +77,19 @@ public class MemberService {
 		String encodedPW = member.getPassword();
 		
 		if(passwordEncoder.matches(rawPW, encodedPW)) {
-			int cnt1 = mapper.deleteAuth(dto.getId());
+			// 권한 테이블 삭제
+			mapper.deleteAuth(dto.getId());
+			
+			// 이 멤버가 쓴 댓글 삭제
+			replyMapper.deleteReplyByMemberId(dto.getId());
+			
+			// 이 멤버가 쓴 게시글 삭제
+			List<BoardDto> boardList = boardService.listByMemberId(dto.getId());
+			for(BoardDto board : boardList) {
+				boardService.deleteBoard(board.getId());
+			}
+						
+			// 멤버 테이블 삭제
 			int cnt2 = mapper.deleteMemberById(dto.getId());
 				
 			return cnt2 == 1;

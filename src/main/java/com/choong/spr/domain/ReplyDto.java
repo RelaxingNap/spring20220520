@@ -9,8 +9,11 @@ public class ReplyDto {
 	private Integer id;
 	private Integer boardId;
 	private String content;
+	private String memberId;
+	private String nickName;
+	private boolean own;
 	private LocalDateTime inserted;
-
+	
 	public String getPrettyInserted() {
 		// 24시간 이내면 시간만
 		// 이전이면 년-월-일
