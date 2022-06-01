@@ -22,7 +22,8 @@
 			<div class="col">
 				<h1>글 작성</h1>
 				
-				<form action="${appRoot }/board/insert" method="post">
+				<%-- 파일을 보낼때에는 enctype에 multipart/form-data을 넣어주어야 함 --%>
+				<form action="${appRoot }/board/insert" method="post" enctype="multipart/form-data">
 					<div>
 						<label class="form-label" for="input1">제목</label>
 						<input class="form-control" type="text" name="title" required id="input1" />
@@ -31,6 +32,10 @@
 					<div>
 						<label class="form-label" for="textarea1">본문</label>
 						<textarea class="form-control" name="body" id="textarea1" cols="30" rows="10"></textarea>
+					</div>
+					<div>
+						파일 
+						<input type="file" name="file" accept="image/*"/>
 					</div>
 					
 					<button class="btn btn-primary">작성</button>

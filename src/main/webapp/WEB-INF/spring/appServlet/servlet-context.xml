@@ -23,6 +23,8 @@
 	
 	<context:component-scan base-package="com.choong.spr.controller" />
 	
-	
+	<!-- file upload 처리를 위한 bean -->
+	<beans:bean id="multipartResolver" 
+	class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean>
 	
 </beans:beans>

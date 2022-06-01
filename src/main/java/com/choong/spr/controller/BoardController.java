@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.choong.spr.domain.BoardDto;
@@ -40,12 +41,19 @@ public class BoardController {
 	}
 	
 	@PostMapping("insert")
-	public String insert(BoardDto board, Principal principal, RedirectAttributes rttr) {
+	public String insert(BoardDto board, MultipartFile file, Principal principal, RedirectAttributes rttr) {
 		
+		//	System.out.println(file.getOriginalFilename()); // 파일명
+		//	System.out.println(file.getSize()); // 파일 크기
+		
+		if(file.getSize() > 0) {
+			board.setFileName(file.getOriginalFilename());
+		}
+	
 		// principal객체에 로그인한 유저의 정보들이 담김
 		board.setMemberId(principal.getName());// 로그인한 사람이름 세팅
 			
-		boolean success = service.insertBoard(board);
+		boolean success = service.insertBoard(board,file);
 						
 		if (success) {
 			rttr.addFlashAttribute("message", "새 글이 등록되었습니다.");

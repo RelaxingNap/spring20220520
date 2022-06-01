@@ -284,6 +284,10 @@
 					</div>
 					
 					<div>
+						<img src="file:///C:/imgtmp/board/${board.id }/${board.fileName }"  />
+					</div>
+					
+					<div>
 						<label class="form-label" for="input1">작성자</label>
 						<input class="form-control" type="text" name="nickName" 
 							id="input3" value="${board.nickName }" readonly/>

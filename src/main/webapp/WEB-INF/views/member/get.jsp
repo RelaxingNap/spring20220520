@@ -199,7 +199,8 @@
 
 </head>
 <body>
-	<my:navBar />
+	<my:navBar current="memberInfo"/>
+	
 	<div class="container">
 		<h3 id="Message1"></h3>
 	</div>
