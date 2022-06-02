@@ -1,6 +1,7 @@
 package com.choong.spr.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,20 +42,29 @@ public class BoardController {
 	}
 	
 	@PostMapping("insert")
-	public String insert(BoardDto board, MultipartFile file, Principal principal, RedirectAttributes rttr) {
+	public String insert(BoardDto board, MultipartFile[] file, Principal principal, RedirectAttributes rttr) {
 		
 		//	System.out.println(file.getOriginalFilename()); // 파일명
 		//	System.out.println(file.getSize()); // 파일 크기
 		
-		if(file.getSize() > 0) {
-			board.setFileName(file.getOriginalFilename());
+//		if(file.getSize() > 0) {
+//			board.setFileName(file.getOriginalFilename());
+//		}
+		
+		if(file != null) {
+			List<String> fileList = new ArrayList<>();
+			
+			for(MultipartFile f : file) {
+				fileList.add(f.getOriginalFilename());
+			}
+			board.setFileName(fileList);
 		}
-	
+		
 		// principal객체에 로그인한 유저의 정보들이 담김
 		board.setMemberId(principal.getName());// 로그인한 사람이름 세팅
-			
+		
 		boolean success = service.insertBoard(board,file);
-						
+		
 		if (success) {
 			rttr.addFlashAttribute("message", "새 글이 등록되었습니다.");
 		} else {
@@ -77,8 +87,12 @@ public class BoardController {
 	
 	@PostMapping("modify")
 	public String modify(BoardDto dto, Principal principal, RedirectAttributes rttr) {
+		
+		//Principal : 현재 접속되어진 사람의 정보를 담은 객체
+		//DB에 등록되어진 게시물 정보
 		BoardDto oldBoard = service.getBoardById(dto.getId());
 		
+		//DB에 등록되어진 게시판에 글쓴사람과 현재 접속한 사람이 동일한지 비교
 		if(oldBoard.getMemberId().equals(principal.getName())) {
 			boolean success = service.updateBoard(dto);
 			

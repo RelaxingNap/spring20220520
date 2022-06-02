@@ -110,7 +110,8 @@ public class MemberController {
 						    HttpServletRequest request, 
 						    Model model) {
 	
-		if(hasAuthOrAdmin(id, principal, request)) {
+		// 권한처리를 컨트롤러에서 내부메소드로 처리
+		if(hasAuthOrAdmin(id, principal, request)) { 
 			MemberDto member = service.getMemberById(id);
 			
 			model.addAttribute("member", member);
@@ -122,6 +123,8 @@ public class MemberController {
 	}
 	
 	private boolean hasAuthOrAdmin(String id, Principal principal, HttpServletRequest request) {
+		// 권한 처리를 위한 내부 메소드 
+		// HttpServletRequest에서 권한에 대한 메소드가 있어서 사용
 		return request.isUserInRole("ROLE_ADMIN") || (principal != null && principal.getName().equals(id));
 	}
 	
@@ -131,6 +134,7 @@ public class MemberController {
 			                   HttpServletRequest request, 
 			                   RedirectAttributes rttr) {
 		
+		// 권한처리를 컨트롤러에서 내부메소드로 처리
 		if(hasAuthOrAdmin(dto.getId(), principal, request)) {
 			boolean success = service.removeMember(dto);
 			
@@ -154,6 +158,7 @@ public class MemberController {
 							   String oldPassword, 
 							   RedirectAttributes rttr) {
 		
+		// 권한처리를 컨트롤러에서 내부메소드로 처리
 		if(hasAuthOrAdmin(dto.getId(), principal, request)) {
 			boolean success = service.modifyMember(dto, oldPassword);
 			
@@ -179,7 +184,7 @@ public class MemberController {
 	
 	@GetMapping("initpw") 
 	public void initpwPage(){
-		
+		// password를 아이디랑 동일하게 초기화해주는 페이지
 	}
 	
 	@PostMapping("initpw")

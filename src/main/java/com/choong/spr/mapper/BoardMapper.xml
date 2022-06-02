@@ -40,13 +40,11 @@
 			   b.inserted, 
 			   COUNT(r.id) numOfReply, 
 			   m.id memberId, 
-			   m.nickName nickName, 
-			   f.fileName 
-		
+			   m.nickName nickName 
+				
 		FROM Board b LEFT JOIN Reply r ON b.id = r.board_id
 					 JOIN Member m ON b.memberId = m.id
-					 LEFT JOIN File f ON b.id = f.boardId
-		
+				
 		WHERE b.id = #{id}
 	</select>
 	
@@ -84,4 +82,5 @@
 		DELETE FROM File
 		WHERE boardId = #{boardId}
 	</delete>
+	
 </mapper>

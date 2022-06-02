@@ -97,6 +97,8 @@
 								</div>
 							`);
 						replyListElement.append(replyElement);					
+						//댓글내용을 그냥 보여줄 경우, 수정할 때 스크립트문을 이용한 공격을 통해 보안상의 이슈가 발생할 수 있음
+						//그래서 댓글에 대한 화면을 다 구성한 후 내용을 삽입하는것으로 해결
 						$("#replyContent"+ list[i].id).text(list[i].content);
 						
 						// own이 true일 때만 수정, 삭제 버튼 보이기
@@ -249,8 +251,9 @@
 		<div class="row">
 			<div class="col">
 				<h1>글 본문 
-					
+					<%-- 권한이 있는 유저만 수정버튼이 보이도록 세팅 --%>
 					<sec:authorize access="isAuthenticated()">
+						<%-- 지금 현재 접속한 유저의 정보를 담은 객체(컨트롤러에서 쓰이는 객체와 다름) --%>
 						<sec:authentication property="principal" var="principal" />
 						
 						<c:if test="${principal.username == board.memberId }">
@@ -284,7 +287,9 @@
 					</div>
 					
 					<div>
-						<img src="file:///C:/imgtmp/board/${board.id }/${board.fileName }"  />
+						<c:forEach items="${board.fileName }" var="fileName">
+							<img src="${imageUrl }/board/${board.id }/${fileName }"  />
+						</c:forEach>
 					</div>
 					
 					<div>

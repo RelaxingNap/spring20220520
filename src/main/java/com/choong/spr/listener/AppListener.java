@@ -31,8 +31,12 @@ public class AppListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent sce)  { 
          ServletContext application = sce.getServletContext();
-         
+                
          application.setAttribute("appRoot", application.getContextPath());
+         
+         String imageUrl = "https://bucket0207-1472589630.s3.ap-northeast-2.amazonaws.com";
+         application.setAttribute("imageUrl", imageUrl);
+         
     }
 	
 }

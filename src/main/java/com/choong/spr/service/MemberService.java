@@ -84,6 +84,10 @@ public class MemberService {
 			replyMapper.deleteReplyByMemberId(dto.getId());
 			
 			// 이 멤버가 쓴 게시글 삭제
+			// 1. 이 멤버가 쓴 게시글을 하나하나 찾은 후
+			// 2. 그 게시글들을 하나하나 삭제
+			// 게시글 삭제시 이 멤버가 게시글을 다른사람이 댓글을 달아놓은 경우
+			// 다른사람이 단 댓글도 삭제하게 만듬
 			List<BoardDto> boardList = boardService.listByMemberId(dto.getId());
 			for(BoardDto board : boardList) {
 				boardService.deleteBoard(board.getId());
