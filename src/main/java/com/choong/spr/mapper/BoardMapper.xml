@@ -5,10 +5,10 @@
 <mapper namespace="com.choong.spr.mapper.BoardMapper">
 		
 	<select id="selectBoardAll" resultType="com.choong.spr.domain.BoardDto">
-		SELECT b.id, b.title, b.inserted, COUNT(r.id) numOfReply, m.nickName nickName
+		SELECT b.id, b.title, b.inserted, COUNT(DISTINCT r.id) numOfReply, m.nickName nickName, COUNT(f.id) hasFile
 		FROM Board b LEFT JOIN Reply r ON b.id = r.board_id
 					 JOIN Member m ON b.memberId = m.id
-					 	
+					 LEFT JOIN File f ON b.id = f.boardId	
 		<if test = "keyword != '%%'">
 			<choose>
 				<when test="type == 'all'">
@@ -81,6 +81,11 @@
 	<delete id="deleteFileByBoardId">
 		DELETE FROM File
 		WHERE boardId = #{boardId}
+	</delete>
+	
+	<delete id="deleteFileByBoardIdAndFileName">
+		DELETE FROM File
+		WHERE boardId = #{boardId} AND fileName = #{fileName}
 	</delete>
 	
 </mapper>

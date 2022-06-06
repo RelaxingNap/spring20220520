@@ -200,32 +200,53 @@
 </head>
 <body>
 	<my:navBar current="memberInfo"/>
-	
-	<div class="container">
-		<h3 id="Message1"></h3>
-	</div>
-	
-	<div class="container">
-		아이디 : <input type="text" name="id" value="${member.id }" readonly /> <br />
-		비밀번호 : <input id="passwordInput1" type="text" name="password" value="" /> <br />
-		비밀번호 확인 : <input id="passwordInput2" type="text" value="" /> <br />
-		이메일 : <input id="emailInput1" type="email" name="email" value="${member.email }" /> <button id="checkEmailButton1" disabled>이메일 중복 확인</button> <br />
-		<p id="emailMessage1"></p>
-		닉네임 : <input id="nickNameInput1" type="text" name="nickName" value="${member.nickName }" /> <button id="checkNickNameButton1" disabled>닉네임 중복확인</button> <br />
-		<p id="nickNameMessage1"></p>
-		가입일 : <input type="datetime-local" name="inserted" value="${member.inserted }" readonly /> <br />
-	</div>
-	
-	<%-- 요구사항 --%>
-	<%-- 1. 이메일 input에 변경 발생 시 '이메일 중복확인 버튼 활성화' -> 버튼클릭시 ajax로 요청/응답, 적절한 메시지 출력
-		 2. 닉네임 input에 변경 발생 시 '닉네임 중복확인 버튼 활성화' -> 버튼클릭시 ajax로 요청/응답, 적절한 메시지 출력
-		 3. 암호/암호확인일치, 이메일 중복확인 완료, 닉네임 중복확인 완료 시에만 수정버튼 활성화
-		 	
-	--%>
-	
-	<div class="container">
-		<button data-bs-toggle="modal" data-bs-target="#Modal2" id="modifySubmitButton1" disabled>수정</button>
-		<button data-bs-toggle="modal" data-bs-target="#Modal1">삭제</button>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-6">
+					
+				<h1>회원 정보 보기</h1>
+				
+				<div class="container">
+					<h3 id="Message1"></h3>
+				</div>
+				
+				<div class="container">
+					<label for="idInput1" class="form-label">아이디</label>
+					<input id="idInput1" class="form-control" type="text" name="id" value="${member.id }" readonly /> 
+					
+					<label for="passwordInput1" class="form-label">비밀번호 </label>
+					<input class="form-control" id="passwordInput1" type="text" name="password" value="" /> 
+					
+					<label for="passwordInput2" class="form-label">비밀번호 확인</label>
+					<input class="form-control" id="passwordInput2" type="text" value="" /> 
+					
+					<label for="emailInput1" class="form-label">이메일 </label>
+					<input class="form-control" id="emailInput1" type="email" name="email" value="${member.email }" /> 
+					<button class="btn btn-secondary" id="checkEmailButton1" disabled>이메일 중복 확인</button> 
+					<p class="form-text" id="emailMessage1"></p>
+					
+					<label for="nickNameInput1" class="form-label">닉네임 </label>
+					<input class="form-control" id="nickNameInput1" type="text" name="nickName" value="${member.nickName }" /> 
+					<button class="btn btn-secondary" id="checkNickNameButton1" disabled>닉네임 중복확인</button> 
+					<p class="form-text" id="nickNameMessage1"></p>
+					
+					<label for="" class="form-label">가입일</label>
+					<input type="datetime-local" name="inserted" value="${member.inserted }" readonly /> 
+				</div>
+				
+				<%-- 요구사항 --%>
+				<%-- 1. 이메일 input에 변경 발생 시 '이메일 중복확인 버튼 활성화' -> 버튼클릭시 ajax로 요청/응답, 적절한 메시지 출력
+					 2. 닉네임 input에 변경 발생 시 '닉네임 중복확인 버튼 활성화' -> 버튼클릭시 ajax로 요청/응답, 적절한 메시지 출력
+					 3. 암호/암호확인일치, 이메일 중복확인 완료, 닉네임 중복확인 완료 시에만 수정버튼 활성화
+					 	
+				--%>
+				
+				<div class="mt-3 container">
+					<button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal2" id="modifySubmitButton1" disabled>수정</button>
+					<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal1">삭제</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<!-- 탈퇴 암호 확인 modal -->
@@ -234,14 +255,16 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">회원정보 삭제</h5>
+					<h5 class="modal-title" id="exampleModalLabel">기존 암호 입력</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<form id="form1" action="${appRoot }/member/remove" method="post">
 						<input type="hidden" name="id" value="${member.id }" />
-						암호 : <input type="text" name="password" />
+						
+						<label for="passwordInput3" class="form-label">암호</label>
+						<input class="form-control" id="passwordInput3" type="text" name="password" />
 					</form>		
 				</div>
 				<div class="modal-footer">
@@ -259,7 +282,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel2">회원정보 수정</h5>
+					<h5 class="modal-title" id="exampleModalLabel2">기존 암호 입력</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
@@ -269,7 +292,9 @@
 						<input type="hidden" name="password" />
 						<input type="hidden" name="email" />
 						<input type="hidden" name="nickName" />
-						기존암호 : <input type="text" name="oldPassword" />
+						
+						<label for="passwordInput4" class="form-label">기존암호</label>
+						<input class="form-control" id="passwordInput4" type="text" name="oldPassword" />
 					</form>		
 				</div>
 				<div class="modal-footer">
@@ -283,6 +308,7 @@
 	<div class="container">
 		<p>${message }</p>
 	</div>
+	
 	
 </body>
 </html>

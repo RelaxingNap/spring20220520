@@ -35,7 +35,7 @@ public class BoardService {
 	
 	private S3Client s3; // S3Client객체는 서비스 객체가 만들어질때 바로 구성이 되어야 한다.
 	
-	@Value("${aws.s3.buckerName}") // property파일에서 읽어올 수 있게 어노테이션 세팅
+	@Value("${aws.s3.bucketName}") // property파일에서 읽어올 수 있게 어노테이션 세팅
 	private String bucketName;
 	
 	public List<BoardDto> listBoard(String type, String keyword) {
@@ -63,17 +63,21 @@ public class BoardService {
 		int cnt = mapper.insertBoard(board);
 		
 		// 파일 등록
+		addFiles(board.getId(), files);
+		
+		return cnt == 1;
+	}
+
+	private void addFiles(int id, MultipartFile[] files) {
 		if(files != null) {
 			for(MultipartFile file : files) {
 				if(file.getSize() > 0) {
-					mapper.insertFile(board.getId(), file.getOriginalFilename());
+					mapper.insertFile(id, file.getOriginalFilename());
 					// saveFile(board.getId(), file); // 파일 시스템에 저장. aws에 저장하는것으로 바꿀예정
-					saveFileAwsS3(board.getId(), file); // aws S3에 업로드
+					saveFileAwsS3(id, file); // aws S3에 업로드
 				}
 			}
 		}
-		
-		return cnt == 1;
 	}
 
 	private void saveFileAwsS3(int id, MultipartFile file) {
@@ -128,16 +132,36 @@ public class BoardService {
 		board.setFileName(flieNames);
 		return board;
 	}
-
-	public boolean updateBoard(BoardDto dto) {
+	
+	@Transactional
+	public boolean updateBoard(BoardDto dto, List<String> removeFileList, MultipartFile[] addFileList) {
+		if(removeFileList != null) {
+			//removeFiles(dto.getId(), removeFileList);
+			
+			for(String fileName : removeFileList) {
+				deleteFromAwsS3(dto.getId(), fileName);
+				mapper.deleteFileByBoardIdAndFileName(dto.getId(), fileName);
+			}
+			
+		}
+		
 		// TODO Auto-generated method stub
-		return mapper.updateBoard(dto) == 1;
+		// File 테이블에 추가된 파일 insert
+		if(addFileList != null) {
+			// s3에 upload
+			addFiles(dto.getId(), addFileList);
+		}
+				
+		// Board 테이블 update
+		
+		int cnt = mapper.updateBoard(dto);
+		return cnt == 1;
 	}
 
 	@Transactional
 	public boolean deleteBoard(int id) {
 		// 파일 목록 읽기
-		List<String> fileNames = mapper.selectFileByBoardId(id);
+		List<String> fileList = mapper.selectFileByBoardId(id);
 		
 		// 실제 파일 삭제(파일 시스템)
 		/*if(fileName != null && !fileName.isEmpty()) {
@@ -153,10 +177,7 @@ public class BoardService {
 		}*/
 		
 		// 실제 파일 삭제(aws S3)
-		deleteFromAwsS3(id, fileNames);
-		
-		// 파일테이블 삭제
-		mapper.deleteFileByBoardId(id);
+		removeFiles(id, fileList);
 		
 		// 댓글테이블 삭제		
 		replyMapper.deleteByBoardId(id);
@@ -164,10 +185,18 @@ public class BoardService {
 		return mapper.deleteBoard(id) == 1;
 	}
 
-	// aws에서 파일삭제를 하는 내부 메소드
-	private void deleteFromAwsS3(int id, List<String> fileNames) {
+	private void removeFiles(int id, List<String> fileList) {
+		for(String fileName : fileList) {
+			deleteFromAwsS3(id, fileName);
+		}
 		
-		for(String fileName : fileNames) {
+		// 파일테이블 삭제
+		mapper.deleteFileByBoardId(id);
+	}
+
+	// aws에서 파일삭제를 하는 내부 메소드
+	private void deleteFromAwsS3(int id, String fileName) {
+		
 			String key = "board/" + id + "/" + fileName;
 			
 			DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
@@ -175,7 +204,6 @@ public class BoardService {
 					.key(key)
 					.build();
 			s3.deleteObject(deleteObjectRequest);
-		}
 	}
 
 	// 가입한 유저가 쓴 글 찾는 메소드(가입한 유저 삭제시 필요) 

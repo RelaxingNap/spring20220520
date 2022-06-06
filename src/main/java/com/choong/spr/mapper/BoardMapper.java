@@ -26,6 +26,8 @@ public interface BoardMapper {
 
 	void deleteFileByBoardId(int boardId);
 
+	void deleteFileByBoardIdAndFileName(@Param("boardId")int boardId, @Param("fileName") String fileName);
+
 	
 
 }

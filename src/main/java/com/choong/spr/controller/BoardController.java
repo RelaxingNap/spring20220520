@@ -86,7 +86,11 @@ public class BoardController {
 	}
 	
 	@PostMapping("modify")
-	public String modify(BoardDto dto, Principal principal, RedirectAttributes rttr) {
+	public String modify(BoardDto dto, 
+						 @RequestParam(name = "removeFileList", required = false) List<String> removeFileList,	
+						 MultipartFile[] addFileList,
+						 Principal principal, 
+						 RedirectAttributes rttr) {
 		
 		//Principal : 현재 접속되어진 사람의 정보를 담은 객체
 		//DB에 등록되어진 게시물 정보
@@ -94,7 +98,7 @@ public class BoardController {
 		
 		//DB에 등록되어진 게시판에 글쓴사람과 현재 접속한 사람이 동일한지 비교
 		if(oldBoard.getMemberId().equals(principal.getName())) {
-			boolean success = service.updateBoard(dto);
+			boolean success = service.updateBoard(dto, removeFileList, addFileList);
 			
 			if (success) {
 				rttr.addFlashAttribute("message", "글이 수정되었습니다.");
